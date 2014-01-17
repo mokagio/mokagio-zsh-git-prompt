@@ -36,6 +36,13 @@ parse_git_state() {
   # fi
 
   local GIT_DIR="$(git rev-parse --git-dir 2> /dev/null)"
+
+  # Check that everything's fine in the git dir
+  # http://stackoverflow.com/questions/12267912/git-fatal-ambiguous-argument-head-unknown-revision-or-path-not-in-the-workin
+  if [ $? -ne 0 ] || [ -z "$GIT_DIR" ]; then
+      return
+  fi
+
   if [ -n $GIT_DIR ] && test -r $GIT_DIR/MERGE_HEAD; then
     GIT_STATE=$GIT_STATE$GIT_PROMPT_MERGING
 
